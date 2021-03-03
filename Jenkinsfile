@@ -12,7 +12,7 @@ pipeline{
                 checkout([
                     $class: 'GitSCM',
                     branches: scm.branches,
-                    doGenerateSubmoduleConfigurations: scm.doGenerateSubmoduleConfigurations
+                    doGenerateSubmoduleConfigurations: scm.doGenerateSubmoduleConfigurations,
                     extensions: scm.extensions + [
                         [
                             $class: 'CloneOption', 
