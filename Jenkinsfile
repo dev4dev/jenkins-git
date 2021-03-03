@@ -16,7 +16,7 @@ pipeline{
                             name: '**'
                         ]
                     ],
-                    doGenerateSubmoduleConfigurations: scm.doGenerateSubmoduleConfigurations
+                    doGenerateSubmoduleConfigurations: scm.doGenerateSubmoduleConfigurations,
                     extensions: scm.extensions + [
                         [
                             $class: 'CloneOption', 
