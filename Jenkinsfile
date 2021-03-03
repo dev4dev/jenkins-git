@@ -10,14 +10,10 @@ pipeline{
             steps {
                 // checkout scm
                 checkout([
-                    $class: scm.branches, 
-                    branches: [
-                        [
-                            name: '**'
-                        ]
-                    ],
-                    doGenerateSubmoduleConfigurations: scm.doGenerateSubmoduleConfigurations,
-                    extensions: [
+                    $class: 'GitSCM',
+                    branches: scm.branches,
+                    doGenerateSubmoduleConfigurations: scm.doGenerateSubmoduleConfigurations
+                    extensions: scm.extensions + [
                         [
                             $class: 'CloneOption', 
                             depth: 1, 
