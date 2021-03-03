@@ -23,9 +23,8 @@ pipeline{
                         [
                             $class: 'GitLFSPull'
                         ]
-                    ], 
-                    userRemoteConfigs: [[]]]
-                )
+                    ]
+                ])
                 sh 'ruby build.rb'
             }
         }
