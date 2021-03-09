@@ -6,7 +6,7 @@ pipeline{
         label "mac"
     }
     stages {
-        stage("Build") {
+        stage("Checkout") {
             steps {
                 // checkout scm
                 checkout([
@@ -30,13 +30,12 @@ pipeline{
                 sh 'ruby build.rb'
                 env.BUILD_NUMBER = 10500
             }
+        }
 
-            stages {
-                stage("Development") {
-                    steps {
-                        sh 'echo $BUILD_NUMBER'
-                    }
-                }
+
+        stage("Development") {
+            steps {
+                sh 'echo $BUILD_NUMBER'
             }
         }
     }
