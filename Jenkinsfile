@@ -28,7 +28,9 @@ pipeline{
                     userRemoteConfigs: scm.userRemoteConfigs
                 ])
                 sh 'ruby build.rb'
-                env.BUILD_NUMBER = 10500
+                script {
+                    env.BUILD_NUMBER = 10500
+                }
             }
         }
 
