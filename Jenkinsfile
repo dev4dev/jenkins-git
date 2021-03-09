@@ -16,7 +16,7 @@ pipeline{
                     extensions: scm.extensions + [
                         [
                             $class: 'CloneOption', 
-                            depth: 1, 
+                            depth: 3, 
                             noTags: false, 
                             reference: '', 
                             shallow: true
