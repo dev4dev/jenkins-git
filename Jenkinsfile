@@ -5,9 +5,6 @@ pipeline{
     agent {
         label "mac"
     }
-    environment {
-        PULL_REQUEST = $CHANGE_ID != ""
-    }
     stages {
         stage("Checkout") {
             steps {
@@ -32,6 +29,7 @@ pipeline{
                 ])
                 script {
                     env.BUILD_NUMBER = "${sh(returnStdout: true, script: 'ruby ./scripts/get-version.rb').trim()}"
+                    env.PULL_REQUEST = env.CHANGE_ID != ""
                 }
             }
         }
