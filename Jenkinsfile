@@ -5,6 +5,9 @@ pipeline{
     agent {
         label "mac"
     }
+    environment {
+        PULL_REQUEST = $CHANGE_ID != ""
+    }
     stages {
         stage("Checkout") {
             steps {
@@ -27,7 +30,6 @@ pipeline{
                     ], 
                     userRemoteConfigs: scm.userRemoteConfigs
                 ])
-                sh 'ruby build.rb'
                 script {
                     env.BUILD_NUMBER = "${sh(returnStdout: true, script: 'ruby ./scripts/get-version.rb').trim()}"
                 }
@@ -38,6 +40,8 @@ pipeline{
         stage("Development") {
             steps {
                 sh 'echo $BUILD_NUMBER'
+                sh '$CHANGE_ID'
+                sh 'git tag'
             }
         }
 
