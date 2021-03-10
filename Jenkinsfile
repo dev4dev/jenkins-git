@@ -40,6 +40,7 @@ pipeline{
                 sh 'echo $BUILD_NUMBER'
                 sh '$CHANGE_ID'
                 sh 'git tag'
+                sh '$PULL_REQUEST'
             }
         }
 
