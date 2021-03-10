@@ -29,13 +29,19 @@ pipeline{
                 ])
                 sh 'ruby build.rb'
                 script {
-                    env.BUILD_NUMBER = 10500
+                    env.BUILD_NUMBER = "${sh(returnStdout: true, script: 'ruby ./scripts/get-version.rb').trim()}"
                 }
             }
         }
 
 
         stage("Development") {
+            steps {
+                sh 'echo $BUILD_NUMBER'
+            }
+        }
+
+        stage("Preprod") {
             steps {
                 sh 'echo $BUILD_NUMBER'
             }
