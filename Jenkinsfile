@@ -38,7 +38,7 @@ pipeline{
         stage("Development") {
             steps {
                 sh "echo $BUILD_NUMBER"
-                sh "$env.CHANGE_ID"
+                sh "echo $env.CHANGE_ID"
                 sh 'git tag'
                 sh "$PULL_REQUEST"
             }
