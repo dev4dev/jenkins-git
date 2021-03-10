@@ -37,16 +37,16 @@ pipeline{
 
         stage("Development") {
             steps {
-                sh 'echo $BUILD_NUMBER'
-                sh '$CHANGE_ID'
+                sh "echo $BUILD_NUMBER"
+                sh "$env.CHANGE_ID"
                 sh 'git tag'
-                sh '$PULL_REQUEST'
+                sh "$PULL_REQUEST"
             }
         }
 
         stage("Preprod") {
             steps {
-                sh 'echo $BUILD_NUMBER'
+                sh "echo $BUILD_NUMBER"
             }
         }
     }
