@@ -44,12 +44,12 @@ pipeline{
                     userRemoteConfigs: scm.userRemoteConfigs
                 ])
 
-                script {
-                    // overwrite BUILD_NUMBER with a custom value from our script
-                    env.BUILD_NUMBER = "${sh(returnStdout: true, script: 'ruby ./scripts/get-version.rb').trim()}"
-                    // mark PRs
-                    env.PULL_REQUEST = env.BRANCH_NAME.startsWith('PR')
-                }
+                // script {
+                //     // overwrite BUILD_NUMBER with a custom value from our script
+                //     env.BUILD_NUMBER = "${sh(returnStdout: true, script: 'ruby ./scripts/get-version.rb').trim()}"
+                //     // mark PRs
+                //     env.PULL_REQUEST = env.BRANCH_NAME.startsWith('PR')
+                // }
             }
         }
 
