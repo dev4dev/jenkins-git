@@ -34,6 +34,13 @@ pipeline{
             }
         }
 
+        stage("GIT") {
+            steps {
+                sh 'arch -x86_64 git lfs install'
+                sh 'arch -x86_64 git lfs pull'
+            }
+        }
+
 
         stage("Development") {
             steps {
