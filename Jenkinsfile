@@ -26,10 +26,10 @@ pipeline{
                             reference: '',
                             shallow: true
                         ],
-                        // Git LFS
-                        // [
-                        //     $class: 'GitLFSPull'
-                        // ],
+                        Git LFS
+                        [
+                            $class: 'GitLFSPull'
+                        ],
                         // Submodules
                         [
                             $class: 'SubmoduleOption',
