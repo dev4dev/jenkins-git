@@ -27,9 +27,9 @@ pipeline{
                             shallow: true
                         ],
                         // Git LFS
-                        [
-                            $class: 'GitLFSPull'
-                        ],
+                        // [
+                        //     $class: 'GitLFSPull'
+                        // ],
                         // Submodules
                         [
                             $class: 'SubmoduleOption',
@@ -55,6 +55,7 @@ pipeline{
 
         stage("GIT") {
             steps {
+                sh 'echo $PATH'
                 sh 'arch -x86_64 git lfs install'
                 sh 'arch -x86_64 git lfs pull'
             }
