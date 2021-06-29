@@ -7,6 +7,10 @@ pipeline{
     }
     stages {
         stage("Checkout") {
+            options {
+                // if git stuck, then cancel a build
+                timeout(time: 10, unit: 'MINUTES')
+            }
             steps {
                 // checkout scm
                 checkout([
@@ -14,39 +18,62 @@ pipeline{
                     branches: scm.branches,
                     doGenerateSubmoduleConfigurations: scm.doGenerateSubmoduleConfigurations,
                     extensions: scm.extensions + [
+                        // Base Clone options
                         [
-                            $class: 'CloneOption', 
-                            depth: 3, 
-                            noTags: false, 
-                            reference: '', 
+                            $class: 'CloneOption',
+                            depth: 10,
+                            noTags: false,
+                            reference: '',
                             shallow: true
-                        ], 
+                        ],
+                        // Git LFS
+                        // [
+                        //     $class: 'GitLFSPull'
+                        // ],
+                        // Submodules
                         [
-                            $class: 'GitLFSPull'
+                            $class: 'SubmoduleOption',
+                            depth: 1,
+                            disableSubmodules: false,
+                            recursiveSubmodules: false,
+                            reference: '',
+                            shallow: true,
+                            trackingSubmodules: false
                         ]
-                    ], 
+                    ],
                     userRemoteConfigs: scm.userRemoteConfigs
                 ])
-                script {
-                    env.BUILD_NUMBER = "${sh(returnStdout: true, script: 'ruby ./scripts/get-version.rb').trim()}"
-                    env.PULL_REQUEST = env.CHANGE_ID != ""
-                }
+
+                // script {
+                //     // overwrite BUILD_NUMBER with a custom value from our script
+                //     env.BUILD_NUMBER = "${sh(returnStdout: true, script: 'ruby ./scripts/get-version.rb').trim()}"
+                //     // mark PRs
+                //     env.PULL_REQUEST = env.BRANCH_NAME.startsWith('PR')
+                // }
+            }
+        }
+
+        stage("GIT") {
+            steps {
+                sh 'echo $PATH'
+                sh 'arch -x86_64 git lfs install'
+                sh 'arch -x86_64 git lfs pull'
             }
         }
 
 
         stage("Development") {
             steps {
-                sh 'echo $BUILD_NUMBER'
-                sh '$CHANGE_ID'
+                sh "echo $BUILD_NUMBER"
+                sh "echo $env.CHANGE_ID"
                 sh 'git tag'
-                sh '$PULL_REQUEST'
+                sh "$PULL_REQUEST"
             }
         }
 
         stage("Preprod") {
             steps {
-                sh 'echo $BUILD_NUMBER'
+                sh "echo $BUILD_NUMBER"
             }
         }
     }
