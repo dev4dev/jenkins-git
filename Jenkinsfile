@@ -7,6 +7,10 @@ pipeline{
     }
     stages {
         stage("Checkout") {
+            options {
+                // if git stuck, then cancel a build
+                timeout(time: 10, unit: 'MINUTES')
+            }
             steps {
                 // checkout scm
                 checkout([
@@ -14,22 +18,37 @@ pipeline{
                     branches: scm.branches,
                     doGenerateSubmoduleConfigurations: scm.doGenerateSubmoduleConfigurations,
                     extensions: scm.extensions + [
+                        // Base Clone options
                         [
-                            $class: 'CloneOption', 
-                            depth: 3, 
-                            noTags: false, 
-                            reference: '', 
+                            $class: 'CloneOption',
+                            depth: 10,
+                            noTags: false,
+                            reference: '',
                             shallow: true
-                        ], 
+                        ],
+                        // Git LFS
+                        // [
+                        //     $class: 'GitLFSPull'
+                        // ],
+                        // Submodules
                         [
-                            $class: 'GitLFSPull'
+                            $class: 'SubmoduleOption',
+                            depth: 1,
+                            disableSubmodules: false,
+                            recursiveSubmodules: false,
+                            reference: '',
+                            shallow: true,
+                            trackingSubmodules: false
                         ]
-                    ], 
+                    ],
                     userRemoteConfigs: scm.userRemoteConfigs
                 ])
+
                 script {
+                    // overwrite BUILD_NUMBER with a custom value from our script
                     env.BUILD_NUMBER = "${sh(returnStdout: true, script: 'ruby ./scripts/get-version.rb').trim()}"
-                    env.PULL_REQUEST = env.CHANGE_ID != ""
+                    // mark PRs
+                    env.PULL_REQUEST = env.BRANCH_NAME.startsWith('PR')
                 }
             }
         }
