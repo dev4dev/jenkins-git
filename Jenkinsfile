@@ -26,7 +26,7 @@ pipeline{
                             reference: '',
                             shallow: true
                         ],
-                        Git LFS
+                        // Git LFS
                         [
                             $class: 'GitLFSPull'
                         ],
